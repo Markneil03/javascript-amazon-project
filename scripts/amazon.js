@@ -70,13 +70,14 @@ document.querySelectorAll('.js-add-to-cart')
 
         if (productId === item.productId){
           matchItem = item;
+          
         }
       });
 
       const selectQty  = Number(selectedQty);
       if (matchItem){
         matchItem.quantity += selectQty;
-      
+   
       }else{
         cart.push(
           {
@@ -85,7 +86,7 @@ document.querySelectorAll('.js-add-to-cart')
           }
         );
       }
-
+   
       //adding to quantity
       let productQty = 0;
       cart.forEach((item) => {
@@ -100,4 +101,39 @@ document.querySelectorAll('.js-add-to-cart')
     }, 2000);
 
     });
-});;
+
+
+
+});
+
+
+//trial
+
+const owner  = [{
+  name: 'mark',
+  age: 21,
+
+},
+{
+  name: 'mike',
+  age: 20,
+}];
+
+let check;
+
+owner.forEach((item) => {
+  if (item.name === 'mark'){
+    check = item;
+ 
+  }
+});
+
+
+if (check){
+  check.name = "changed";
+
+  check.age = 100;
+}
+
+console.log(owner);
+console.log(check);
