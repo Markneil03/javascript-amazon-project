@@ -3,9 +3,13 @@ import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import {deliveryOptions} from '../data/deliveryOptions.js';
-let cartHTML;
 
 
+
+// function for re renning all the code
+function renderOrderSummary(){
+
+    let cartHTML;
 
 cart.forEach((cartItem) => {
 
@@ -87,50 +91,9 @@ cartHTML += `
     `;
 });
 
-
-function deliveryOptionsHTML (matchingProdId, cartItem){
-
-    let html = '';
-
-
-
-    deliveryOptions.forEach((deliveryOption) => {
-
-        const today = dayjs();
-
-        const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    
-        const dateString = deliveryDate.format('dddd, MMMM D');
-
-
-    
-        const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${formatCurrency(deliveryOption.priceCents)} - `;
- 
-        const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
-     html +=   
-     `
-             <div class="delivery-option js-delivery-option" data-product-id= "${matchingProdId}" data-delivery-option-id="${deliveryOption.id}">
-                <input type="radio"
-                ${isChecked ? 'Checked' : ''}
-                class="delivery-option-input"
-                name="delivery-option-${matchingProdId}">
-                <div>
-                <div class="delivery-option-date">
-                   ${dateString}
-                </div>
-                <div class="delivery-option-price">
-                    ${priceString} Shipping
-                </div>
-                </div>
-            </div>
-        `;
-    });
-
-    return html;
-   
-}
-
 document.querySelector('.js-order-summary').innerHTML = cartHTML;
+    
+
 
 
 document.querySelectorAll('.js-delete-quantity').forEach((link) => {
@@ -202,9 +165,67 @@ document.querySelectorAll('.js-update-quantity').forEach((updateButton) => {
     });
 });
 
+// changing the delivery option
+document.querySelectorAll('.js-delivery-option')
+.forEach( (element) => {
+    element.addEventListener('click' ,() => {
+        const {productId, deliveryOptionId} = element.dataset;
+        updateDeliveryOption(productId, deliveryOptionId);
+        renderOrderSummary();
+        });
+});
+
+
+}
 
 
 
+//functions displaying the delivery options
+function deliveryOptionsHTML (matchingProdId, cartItem){
+
+    let html = '';
+
+
+
+    deliveryOptions.forEach((deliveryOption) => {
+
+        const today = dayjs();
+
+        const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
+    
+        const dateString = deliveryDate.format('dddd, MMMM D');
+
+
+    
+        const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${formatCurrency(deliveryOption.priceCents)} - `;
+ 
+        const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
+     html +=   
+     `
+             <div class="delivery-option js-delivery-option" data-product-id= "${matchingProdId}" data-delivery-option-id="${deliveryOption.id}">
+                <input type="radio"
+                ${isChecked ? 'Checked' : ''}
+                class="delivery-option-input"
+                name="delivery-option-${matchingProdId}">
+                <div>
+                <div class="delivery-option-date">
+                   ${dateString}
+                </div>
+                <div class="delivery-option-price">
+                    ${priceString} Shipping
+                </div>
+                </div>
+            </div>
+        `;
+    });
+
+    return html;
+   
+}
+
+
+
+// function for saving the entered quantity
 function saveQty(saveBtn){
     saveBtn.addEventListener('click', () => {
          
@@ -230,17 +251,8 @@ function saveQty(saveBtn){
       });
 }
 
-
-
-
-// changing the delivery option
-document.querySelectorAll('.js-delivery-option')
-.forEach( (element) => {
-    element.addEventListener('click' ,() => {
-        const {productId, deliveryOptionId} = element.dataset;
-        updateDeliveryOption(productId, deliveryOptionId);
-    });
-});
+//rendering all the code.
+renderOrderSummary();
 
 
 
