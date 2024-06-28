@@ -1,9 +1,9 @@
-import {cart, removeFromCart, totalQuantity, updateQty, updateDeliveryOption} from '../../data/cart.js';
-import {products} from '../../data/products.js';
+import {cart, removeFromCart, totalQuantity, updateQty, updateDeliveryOption, itemsPayment} from '../../data/cart.js';
+import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import {deliveryOptions} from '../../data/deliveryOptions.js';
-
+import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js';
+import {renderPaymentSummary} from './paymentSummary.js';
 
 
 // function for re renning all the code
@@ -15,31 +15,13 @@ cart.forEach((cartItem) => {
 
     const productId = cartItem.id;
   
-   let addedCarts;
-   
-   
-   
-    products.forEach( (prodItem) => {
-        if(prodItem.id === productId){
-           
-            
-            addedCarts = prodItem;
-           
-        }
-    });
+  const addedCarts = getProduct(productId);
 
 
     const deliveryOptionId = cartItem.deliveryOptionId;
 
-    let deliveryOption;
-
-    deliveryOptions.forEach((option) => {
-        if (option.id === deliveryOptionId){
-
-            deliveryOption = option;
-        }
-    });
-
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
+   
     const today = dayjs();
 
     const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
@@ -106,13 +88,14 @@ document.querySelectorAll('.js-delete-quantity').forEach((link) => {
         //removing on cart array
        
        removeFromCart(prodId);
+       renderPaymentSummary();
 
         //removing on webpage interface
         document.querySelector(`.js-cart-item-container-${prodId}`).remove();
     });
 });
 
-totalQuantity();
+
 
 
 //checkout total
@@ -219,6 +202,7 @@ function deliveryOptionsHTML (matchingProdId, cartItem){
         `;
     });
 
+    renderPaymentSummary();
     return html;
    
 }
@@ -242,6 +226,8 @@ function saveQty(saveBtn){
             alert('Entered is less than 0 or more than 1000 Please Enter between 0-1000');
            }else{
             updateQty(toUpdateQty, prodId);
+            renderPaymentSummary();
+
            }
         }else{
             alert('Entered is Not A number');
@@ -252,8 +238,6 @@ function saveQty(saveBtn){
 }
 
 
-
-
-
+totalQuantity();
 
 

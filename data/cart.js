@@ -1,3 +1,4 @@
+ 
  export let cart = JSON.parse(localStorage.getItem('cart')) === null ?  [{
    id: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
    quantity : 2,
@@ -42,6 +43,7 @@ export function removeFromCart(productID){
 
    saveStorage();
    totalQuantity();
+   itemsPayment();
 }
 
 export function addToCart(productId , selectedQty){
@@ -73,21 +75,35 @@ export function addToCart(productId , selectedQty){
 
    saveStorage();
 
+
+
  }
 
  //total quantity checkout
  export function totalQuantity(){
-   let totalQuantity = 0;
+   let totQty = 0;
    cart.forEach((cartItem) => {
-       totalQuantity += cartItem.quantity;
+       totQty += cartItem.quantity;
    });
 
    
    document.querySelector('.js-checkout-header-middle-section').innerHTML = `
     Checkout (<a class="return-to-home-link"
-           href="amazon.html">${totalQuantity} items</a>)
+           href="amazon.html">${totQty} items</a>)
    `;
 
+
+}
+
+export function itemsPayment (){
+  let totQty = 0;
+
+  cart.forEach((cartItem) => {
+      totQty += cartItem.quantity;
+  });
+
+
+  document.querySelector('.js-payment-summary-items').innerHTML = `Items (${totQty}): `;
 }
 
 
@@ -110,10 +126,16 @@ if (matchItem){
 
 
 
-saveStorage();
+itemsPayment();
 totalQuantity();
 document.querySelector(`.quantity-label-${prodId}`).innerHTML = `${qty}`;
+saveStorage();
+
+return qty;
 }
+
+
+
 
 
 // function for updating delivery option
