@@ -9,7 +9,7 @@ import {renderPaymentSummary} from './paymentSummary.js';
 // function for re renning all the code
 export function renderOrderSummary(){
 
-    let cartHTML;
+    let cartHTML = '';
 
 cart.forEach((cartItem) => {
 
