@@ -1,5 +1,5 @@
 import { products} from "../data/products.js";
-import {cart, addToCart} from '../data/cart.js';
+import {cart, addToCart, totalCart} from '../data/cart.js';
 import { formatCurrency } from "./utils/money.js";
     let productsHTML = '';
 
@@ -56,28 +56,28 @@ products.forEach((product) => {
     `;
 });
 
-function totalCart(){
-  let totalQuantity = 0;
-  cart.forEach((cartItem) => {
-      totalQuantity += cartItem.quantity;
-  });
+// function totalCart(){
+//   let totalQuantity = 0;
+//   cart.forEach((cartItem) => {
+//       totalQuantity += cartItem.quantity;
+//   });
 
-  if (totalQuantity <= 99){
-    document.querySelector('.js-cart-quantity').innerHTML = `
+//   if (totalQuantity <= 99){
+//     document.querySelector('.js-cart-quantity').innerHTML = `
 
-    ${totalQuantity}
+//     ${totalQuantity}
      
-`;
-  }else{
-    document.querySelector('.js-cart-quantity').innerHTML = `
+// `;
+//   }else{
+//     document.querySelector('.js-cart-quantity').innerHTML = `
 
-  99+
+//   99+
      
-`;
-  }
+// `;
+//   }
  
 
-}
+// }
 
 totalCart();
 function quantityCart (addedElement){
@@ -89,7 +89,16 @@ function quantityCart (addedElement){
   });
   
 
-  document.querySelector('.cart-quantity').innerHTML = productQty;
+  if (productQty <= 99){
+    document.querySelector('.cart-quantity').innerHTML = productQty;
+  }else{
+    document.querySelector('.cart-quantity').innerHTML = `
+
+  99+
+     
+`;
+  }
+//  document.querySelector('.cart-quantity').innerHTML = productQty;
    addedElement.classList.add('added-to-cart-visible');
 
    setTimeout(()=>{
@@ -108,9 +117,9 @@ document.querySelectorAll('.js-add-to-cart')
 
      
      const addedElement = document.querySelector(`.js-added-to-cart-${productId}`);
-      const selectedQty = document.querySelector(`.js-quantity-selector-${productId}`).value;
+      const selectedQty = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
     
-    
+      
     // //adding to cart
       addToCart(productId, selectedQty);
 

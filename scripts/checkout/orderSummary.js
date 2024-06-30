@@ -1,4 +1,4 @@
-import {cart, removeFromCart, totalQuantity, updateQty, updateDeliveryOption, itemsPayment} from '../../data/cart.js';
+import {cart, removeFromCart,  updateQty, updateDeliveryOption, itemsPayment, totalQuantity} from '../../data/cart.js';
 import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
@@ -9,6 +9,7 @@ import {renderPaymentSummary} from './paymentSummary.js';
 // function for re renning all the code
 export function renderOrderSummary(){
 
+ 
     let cartHTML = '';
 
 cart.forEach((cartItem) => {
@@ -31,7 +32,9 @@ cart.forEach((cartItem) => {
 
 
 cartHTML += `
-    <div class="cart-item-container js-cart-item-container-${addedCarts.id}">
+    <div class="cart-item-container 
+    js-cart-item-container
+    js-cart-item-container-${addedCarts.id}">
     <div class="delivery-date">
         Delivery date: ${dateString}
     </div>
@@ -47,7 +50,9 @@ cartHTML += `
         <div class="product-price">
             $${formatCurrency(addedCarts.priceCents)}
         </div>
-        <div class="product-quantity">
+        <div class="product-quantity
+                    js-product-quantity-${addedCarts.id}
+        ">
             <span>
             Quantity: <span class="quantity-label-${addedCarts.id}">${cartItem.quantity}</span>
             </span>
@@ -56,7 +61,8 @@ cartHTML += `
             </span>
         <input type="numbers" class="quantity-input js-quantity-input-${addedCarts.id}"></input>
         <span class="link-primary save-quantity-link js-save-quantity-link-${addedCarts.id}" data-product-id="${addedCarts.id}">Save</span>
-            <span class="delete-quantity-link link-primary js-delete-quantity" data-product-id="${addedCarts.id}">
+            <span class="delete-quantity-link link-primary js-delete-quantity js-delete-link-${addedCarts.id}"
+            data-product-id="${addedCarts.id}">
             Delete
             </span>
         </div>
@@ -74,7 +80,9 @@ cartHTML += `
 });
 
 document.querySelector('.js-order-summary').innerHTML = cartHTML;
-    
+window.onload = function(){
+    totalQuantity();
+}
 
 
 
@@ -239,6 +247,6 @@ function saveQty(saveBtn){
 }
 
 
-totalQuantity();
+
 
 
