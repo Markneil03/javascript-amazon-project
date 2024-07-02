@@ -48,7 +48,7 @@ cartHTML += `
           ${addedCarts.name}
         </div>
         <div class="product-price">
-            $${formatCurrency(addedCarts.priceCents)}
+            ${addedCarts.getPrice()}
         </div>
         <div class="product-quantity
                     js-product-quantity-${addedCarts.id}
