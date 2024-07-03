@@ -727,6 +727,9 @@ export function loadProductFetch(){
       }
      return new Product(productDetails);
     });
+   })
+   .catch((error)=>{
+      console.log(`Unexpected Error. Please try again later. ${error}`);
    });
 
 
@@ -750,6 +753,11 @@ export function loadProducts(fun){
         }
        return new Product(productDetails);
       });
+
+    // error function for callback
+    xhr.addEventListener('error', (error) => {
+      console.log(`Unexpected Error: Please Try Again Later: ${error}`);
+    });
 
       fun();
       
